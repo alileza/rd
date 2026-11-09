@@ -18,14 +18,22 @@ import (
 	"github.com/alileza/rd/extractor"
 )
 
+// version is set with -ldflags "-X main.version=..." in release builds.
+var version = "dev"
+
 func main() {
 	out := flag.String("o", ".", "output directory, or a file path ending in an extension")
 	printURL := flag.Bool("url", false, "print the direct media URL instead of downloading")
+	showVersion := flag.Bool("version", false, "print the version and exit")
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "usage: rd [-o dir|file] [-url] <url>\n\n")
 		flag.PrintDefaults()
 	}
 	flag.Parse()
+	if *showVersion {
+		fmt.Println("rd", version)
+		return
+	}
 	if flag.NArg() != 1 {
 		flag.Usage()
 		os.Exit(2)
